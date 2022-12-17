@@ -1,0 +1,24 @@
+<% html_title("Track across project with EVM") %>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "project_evm", plugin: "redmine_across_project_evm" %>
+<% end %>
+<h2><%= l(:title_cross_project_evm) %></h2>
+<!-- Option -->
+<%= render partial: "across_project_evm/option_field"%>
+<!-- Explanation of unit -->
+<br>
+<%= explanation_of_unit(@working_hours_per_day) %>
+<!-- EVM -->
+<% @projects_evm.each do |project_id, evm| %>
+  <h3><%= project_link(project_id, evm.project_name) %> -
+      <span style="font-size: 80%"><%= project_status_name(evm.project_status) %></span></h3>
+  <%= render partial: "across_project_evm/evm_value",
+             locals: { evm: evm,
+                       basis_date: @basis_date,
+                       working_hours_per_day: @working_hours_per_day } %>
+
+<% end %>
+<!-- CSV download -->
+<% other_formats_links do |f| %>
+  <%= f.link_to "CSV", url: { action: :index, params: permitted_params(params) } %>
+<% end %>
